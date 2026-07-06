@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="service-clientes/ClientesApi/ClientesApi.csproj" Id="c29a15a6-c1b1-44f5-9c65-5b60a89f5725" />
+  <Project Path="service-clientes/ClientesData/ClientesData.csproj" Id="42a4cd1e-bb7a-4652-9b80-0fe68783be6b" />
+</Solution>
