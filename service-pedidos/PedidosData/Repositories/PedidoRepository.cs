@@ -12,6 +12,9 @@ namespace PedidosData.Repositories
 
         public async Task<Pedido?> GetAsync(int id) => await _db.Pedidos.FindAsync(id);
 
+        public async Task<IEnumerable<Pedido>> GetByClienteAsync(int idCliente) =>
+            await _db.Pedidos.Where(p => p.IdCliente == idCliente).ToListAsync();
+
         public async Task AddAsync(Pedido pedido)
         {
             _db.Pedidos.Add(pedido);

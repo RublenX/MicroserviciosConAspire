@@ -10,5 +10,7 @@ namespace PedidosApplication.Services
         Task<Pedido?> GetAsync(int id);
         Task<IEnumerable<Pedido>> GetAllAsync();
         Task<Pedido> UpdateAsync(int id, PedidoRequest pedidoUpdate);
+        Task ActualizarNombreClienteAsync(int idCliente, string nombreCliente);
+        Task EliminarPedidosPorClienteAsync(int idCliente);
     }
 }

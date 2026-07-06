@@ -89,6 +89,29 @@ namespace PedidosApplication.Services
             return true;
         }
 
+        // Actualiza el nombre de cliente almacenado en todos los pedidos del cliente indicado.
+        // Se invoca al recibir el evento ClienteActualizado desde el bus de mensajería.
+        public async Task ActualizarNombreClienteAsync(int idCliente, string nombreCliente)
+        {
+            var pedidos = await _pedidoRepository.GetByClienteAsync(idCliente);
+            foreach (var pedido in pedidos)
+            {
+                pedido.Cliente = nombreCliente;
+                await _pedidoRepository.UpdateAsync(pedido);
+            }
+        }
+
+        // Elimina todos los pedidos del cliente indicado.
+        // Se invoca al recibir el evento ClienteEliminado desde el bus de mensajería.
+        public async Task EliminarPedidosPorClienteAsync(int idCliente)
+        {
+            var pedidos = await _pedidoRepository.GetByClienteAsync(idCliente);
+            foreach (var pedido in pedidos)
+            {
+                await _pedidoRepository.DeleteAsync(pedido.Id);
+            }
+        }
+
         private async Task<string?> GetNombreCliente(int idCliente)
         {
             var response = await _clientesClient.GetAsync($"/api/cliente/{idCliente}");

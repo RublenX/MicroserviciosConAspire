@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using PedidosApplication.Messaging;
 using PedidosApplication.Services;
 using PedidosData.Context;
 using PedidosData.Repositories;
@@ -33,6 +34,10 @@ namespace PedidosApi
             // Inyección de dependencias para repositorios
             builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
             builder.Services.AddScoped<IPedidoService, PedidoService>();
+
+            // Configuración de RabbitMQ y consumidor de eventos de Cliente
+            builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+            builder.Services.AddHostedService<ClienteEventConsumer>();
 
             // Swagger / OpenAPI
             builder.Services.AddEndpointsApiExplorer();

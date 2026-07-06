@@ -1,4 +1,5 @@
-﻿using ClientesData.Models;
+﻿using ClientesApi.Messaging;
+using ClientesData.Models;
 using ClientesData.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace ClientesApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ClienteController(IClienteRepository clienteRepository) : ControllerBase
+    public class ClienteController(IClienteRepository clienteRepository, IEventPublisher eventPublisher) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetAll()
@@ -45,6 +46,10 @@ namespace ClientesApi.Controllers
                 if (clienteGet == null) return NotFound();
                 throw;
             }
+
+            // Notifica al bus de mensajería que el cliente ha sido actualizado
+            await eventPublisher.PublicarClienteActualizadoAsync(cliente.Id, cliente.Nombre);
+
             return NoContent();
         }
 
@@ -54,6 +59,10 @@ namespace ClientesApi.Controllers
             var cliente = await clienteRepository.GetAsync(id);
             if (cliente == null) return NotFound();
             await clienteRepository.DeleteAsync(cliente.Id);
+
+            // Notifica al bus de mensajería que el cliente ha sido eliminado
+            await eventPublisher.PublicarClienteEliminadoAsync(cliente.Id);
+
             return NoContent();
         }
     }

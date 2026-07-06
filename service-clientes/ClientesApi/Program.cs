@@ -1,3 +1,4 @@
+using ClientesApi.Messaging;
 using ClientesData.Context;
 using ClientesData.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,10 @@ namespace ClientesApi
 
             // Inyección de dependencias para repositorios
             builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+
+            // Configuración de RabbitMQ y publicador de eventos de Cliente
+            builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+            builder.Services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
             // Swagger / OpenAPI
             builder.Services.AddEndpointsApiExplorer();
