@@ -11,6 +11,9 @@ namespace ClientesApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Añade los servicios comunes de Aspire (service discovery, resiliencia, health checks, OpenTelemetry).
+            builder.AddServiceDefaults();
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -44,6 +47,15 @@ namespace ClientesApi
 
             var app = builder.Build();
 
+            // Aplica migraciones de EF Core automáticamente en desarrollo (necesario al levantar
+            // un contenedor de PostgreSQL nuevo, p.ej. orquestado por Aspire).
+            if (app.Environment.IsDevelopment())
+            {
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -58,6 +70,8 @@ namespace ClientesApi
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapDefaultEndpoints();
 
             app.Run();
         }

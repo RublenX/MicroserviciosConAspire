@@ -13,6 +13,9 @@ namespace PedidosApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Añade los servicios comunes de Aspire (service discovery, resiliencia, health checks, OpenTelemetry).
+            builder.AddServiceDefaults();
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -46,15 +49,23 @@ namespace PedidosApi
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            // Configurar HttpClient para el servicio de Clientes
-            builder.Services.AddHttpClient("Clientes", (sp, client) =>
+            // Configurar HttpClient para el servicio de Clientes (resuelto mediante service discovery de Aspire;
+            // el nombre lógico "clientesapi" coincide con el recurso definido en el AppHost).
+            builder.Services.AddHttpClient("Clientes", client =>
             {
-                var url = sp.GetRequiredService<IConfiguration>()["ServiceUrls:Clientes"];
-                if (!string.IsNullOrWhiteSpace(url))
-                    client.BaseAddress = new Uri(url);
+                client.BaseAddress = new Uri("https+http://clientesapi");
             });
 
             var app = builder.Build();
+
+            // Aplica migraciones de EF Core automáticamente en desarrollo (necesario al levantar
+            // un contenedor de PostgreSQL nuevo, p.ej. orquestado por Aspire).
+            if (app.Environment.IsDevelopment())
+            {
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -69,6 +80,8 @@ namespace PedidosApi
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapDefaultEndpoints();
 
             app.Run();
         }

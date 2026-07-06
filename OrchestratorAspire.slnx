@@ -1,2 +1,15 @@
 <Solution>
+	<Folder Name="/AppHost/">
+		<Project Path="orchestrator-aspire/MicroserviciosConAspire.AppHost/MicroserviciosConAspire.AppHost.csproj" />
+		<Project Path="orchestrator-aspire/MicroserviciosConAspire.ServiceDefaults/MicroserviciosConAspire.ServiceDefaults.csproj" />
+	</Folder>
+	<Folder Name="/service-clientes/">
+		<Project Path="service-clientes/ClientesApi/ClientesApi.csproj" Id="c29a15a6-c1b1-44f5-9c65-5b60a89f5725" />
+		<Project Path="service-clientes/ClientesData/ClientesData.csproj" Id="42a4cd1e-bb7a-4652-9b80-0fe68783be6b" />
+	</Folder>
+	<Folder Name="/service-pedidos/">
+		<Project Path="service-pedidos/PedidosApi/PedidosApi.csproj" Id="b2fef725-61ac-4025-bd30-0e99b1f792d7" />
+		<Project Path="service-pedidos/PedidosApplication/PedidosApplication.csproj" />
+		<Project Path="service-pedidos/PedidosData/PedidosData.csproj" Id="a65de5ee-56da-4d04-85ab-419a89a1c285" />
+	</Folder>
 </Solution>

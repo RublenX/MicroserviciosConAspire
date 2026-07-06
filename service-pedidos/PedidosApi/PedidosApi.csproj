@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PedidosApplication\PedidosApplication.csproj" />
+    <ProjectReference Include="..\..\orchestrator-aspire\MicroserviciosConAspire.ServiceDefaults\MicroserviciosConAspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

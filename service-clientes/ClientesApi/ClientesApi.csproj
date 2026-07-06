@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ClientesData\ClientesData.csproj" />
+    <ProjectReference Include="..\..\orchestrator-aspire\MicroserviciosConAspire.ServiceDefaults\MicroserviciosConAspire.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
